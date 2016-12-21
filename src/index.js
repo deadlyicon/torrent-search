@@ -54,8 +54,8 @@ torrentSearch.magnetLinksForTorrents = function(torrents){
   )
 }
 
-function magnetLinkForTorrent(torrent){
-  return sources[torrent.source].magnetLinkForTorrent(torrent)
+function magnetLinkForTorrent({torrent, verbose}){
+  return sources[torrent.source].magnetLinkForTorrent({torrent, verbose})
 }
 
 const sortBy = {

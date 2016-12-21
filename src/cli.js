@@ -23,15 +23,13 @@ cli
   .option('-a, --asc', 'asc')
   .parse(process.argv);
 
-const options = {
-  query: cli.args[0],
-  verbose: !!cli.verbose,
-  page: cli.page || 1,
-  sort: cli.sort || 'best',
-  desc: !cli.asc,
-}
+process.env.verbose = !!cli.verbose
+const query   = cli.args[0]
+const page    = cli.page || 1
+const sort    = cli.sort || 'best'
+const desc    = !cli.asc
 
-torrentSearch(options)
+torrentSearch({query, page, sort, desc})
   .then(torrents => {
     // torrents.length = 4
     // console.log(torrents)
@@ -39,9 +37,7 @@ torrentSearch(options)
     return torrents
   })
   .then(prompt)
-  .then(torrents =>
-    torrentSearch.magnetLinksForTorrents(torrents)
-  )
+  .then(torrentSearch.magnetLinksForTorrents)
   .then(magnetLinks => {
     magnetLinks.forEach(magnetLink => {
       console.log(magnetLink)
