@@ -47,6 +47,5 @@ torrentSearch.magnetLinksForTorrents = function(torrents){
 }
 
 function magnetLinkForTorrent(torrent){
-  console.log('torrent', {torrent})
   return sources[torrent.source].magnetLinkForTorrent(torrent)
 }

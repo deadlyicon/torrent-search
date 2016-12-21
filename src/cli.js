@@ -44,13 +44,15 @@ function prompt(torrents){
   return new Promise((resolve, reject) => {
     temp.open('myprefix', function(error, info) {
       if (error) return reject(error)
-      fs.write(info.fd, torrentsToPromptText(torrents), "utf-8");
-      fs.close(info.fd, function(error) {
+      fs.write(info.fd, torrentsToPromptText(torrents), "utf-8",  function(error) {
         if (error) return reject(error)
-        child_process.exec(`$EDITOR '${info.path}'`, function(error, stdout) {
-          const promptText = fs.readFileSync(info.path, "utf-8")
-          resolve(parsePromptText(promptText))
-        })
+        fs.close(info.fd, function(error) {
+          if (error) return reject(error)
+          child_process.exec(`$EDITOR '${info.path}'`, function(error, stdout) {
+            const promptText = fs.readFileSync(info.path, "utf-8")
+            resolve(parsePromptText(promptText))
+          })
+        });
       });
     });
   })
