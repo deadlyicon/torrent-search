@@ -1,6 +1,5 @@
 import sources from './sources'
 
-
 export default function torrentSearch({
   query='',
   verbose=false,
@@ -54,8 +53,8 @@ torrentSearch.magnetLinksForTorrents = function(torrents){
   )
 }
 
-function magnetLinkForTorrent({torrent, verbose}){
-  return sources[torrent.source].magnetLinkForTorrent({torrent, verbose})
+function magnetLinkForTorrent(torrent){
+  return sources[torrent.source].magnetLinkForTorrent(torrent)
 }
 
 const sortBy = {

@@ -23,7 +23,7 @@ cli
   .option('-a, --asc', 'asc')
   .parse(process.argv);
 
-process.env.verbose = !!cli.verbose
+if (cli.verbose) process.env.verbose = '1'
 const query   = cli.args[0]
 const page    = cli.page || 1
 const sort    = cli.sort || 'best'
