@@ -53,6 +53,7 @@ function torrentsToPromptText(torrents){
       name: torrent.name.replace(/\|/,'').substr(0,50),
       verified: (torrent.verified ? 'V' : ' '),
       json: JSON.stringify(torrent),
+      age: torrent.age || torrent.created_at || '',
     }
     return sprintf(`# | %(verified)-1s | %(name)-50s | %(age)-20s | %(href)-30s | JSON:%(json)s`, args);
   }).join("\n")
