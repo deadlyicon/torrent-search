@@ -25,8 +25,8 @@ export default {
     desc: Boolean
     page: Number
   */
-  search({query='', sortBy='best', desc=true, page=1}){
-    const url = this.queryToURL({query, sortBy, desc, page})
+  search({query, page, sort, desc}){
+    const url = this.queryToURL({query, page, sort, desc})
     return this.request('get', url)
       .then(($) => {
         return this.extractTorrentDOMNodes($)

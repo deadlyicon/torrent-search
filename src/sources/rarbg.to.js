@@ -3,12 +3,12 @@ import source from '../source'
 export default source.extend({
 
   // 'best' || date' || 'size' || 'seeders' || 'leechers'
-  queryToURL({query, page, sortBy, desc}){
-    const order = sortBy === 'best'
+  queryToURL({query, page, sort, desc}){
+    const order = sort === 'best'
       ? 'data'
-      : sortBy === 'date'
+      : sort === 'date'
         ? 'data'
-        : sortBy
+        : sort
 
     const by = desc ? 'DESC' : 'ASC'
     return `http://rarbg.to/torrents.php?search=${encodeURIComponent(query)}&order=${order}&by=${by}`

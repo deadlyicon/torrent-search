@@ -4,10 +4,10 @@ export default source.extend({
 
   // 'best' || date' || 'size' || 'seeders' || 'leechers'
 
-  queryToURL({query, sortBy, desc, page}){
-    if (sortBy === 'best')
+  queryToURL({query, sort, desc, page}){
+    if (sort === 'best')
       return `http://1337x.to/search/${encodeURIComponent(query)}/${page}/`
-    const sort = sortBy === 'date' ? 'time' : sortBy
+    if (sort === 'date') sort = 'time'
     const direction = desc ? 'desc' : 'asc'
     return `http://1337x.to/sort-search/${encodeURIComponent(query)}/${sort}/${direction}/${page}/`
   },

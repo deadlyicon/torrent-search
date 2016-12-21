@@ -80,7 +80,7 @@ function torrentsToPromptText(torrents){
       age: torrent.age || torrent.created_at || '',
       sal: `${torrent.seeders}/${torrent.leechers}`
     }
-    return sprintf(`# | %(verified)-1s | %(name)-70s | %(sal)-10s | %(age)-15s | %(href)-30s | JSON:%(json)s`, args);
+    return sprintf(`# | %(verified)-1s | %(name)-70s | %(sal)-10s | %(age)-15s | %(size)-10s MB | %(href)-30s | JSON:%(json)s`, args);
   }).join("\n")
 }
 

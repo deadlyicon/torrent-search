@@ -3,17 +3,17 @@ import source from '../source'
 export default source.extend({
 
   // 'best' || date' || 'size' || 'seeders' || 'leechers'
-  queryToURL({query, page, sortBy, desc}){
+  queryToURL({query, page, sort, desc}){
     const orderBy = (
-      sortBy === 'best'
+      sort === 'best'
         ? 'best'
-      : sortBy === 'date'
+      : sort === 'date'
         ? desc ? 'latest' : 'oldest'
-      : sortBy === 'size'
+      : sort === 'size'
         ? desc ? 'sizeD' : 'sizeA'
-      : sortBy === 'seeders'
+      : sort === 'seeders'
         ? 'seeders'
-      : sortBy
+      : sort
     )
 
     return `https://torrentproject.se/?hl=en&num=2000&start=0&filter=2000&safe=off&orderby=${orderBy}&s=${encodeURIComponent(query)}`
