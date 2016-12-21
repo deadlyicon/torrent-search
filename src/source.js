@@ -1,5 +1,4 @@
-import cloudscraper from 'cloudscraper'
-import cheerio from 'cheerio'
+import request from './request'
 import moment from 'moment'
 import chrono from 'chrono-node'
 
@@ -10,13 +9,7 @@ export default {
   },
 
   request(method, url){
-    console.log(`REQUEST ${method} ${url}`)
-    return new Promise(function(resolve, reject){
-      cloudscraper[method.toLowerCase()](url, function(error, response, body) {
-        if (error) return reject(error)
-        resolve(cheerio.load(body))
-      })
-    })
+    return request(method, url)
   },
 
   /*
@@ -90,6 +83,7 @@ function sizeStringToMBInteger(size){
 }
 
 function parseDate(age){
+  if (age instanceof Date) return age
   age = (age || '').replace(/\'(\d\d(?:\D|$))/, "20$1")
   const results = chrono.parse(age)
   return results && results[0] ? results[0].start.date() : undefined

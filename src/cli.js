@@ -33,17 +33,18 @@ const options = {
 
 torrentSearch(options)
   .then(torrents => {
-    console.log(torrents)
+    torrents.length = 4
+    // console.log(torrents)
     // throw new Error('fuck')
     return torrents
   })
-  .then(prompt)
+  // .then(prompt)
   .then(torrents =>
     torrentSearch.magnetLinksForTorrents(torrents)
   )
   .then(magnetLinks => {
     magnetLinks.forEach(magnetLink => {
-      console.log(magnetLink)
+      console.log('MAGNET LINK >>>> ', magnetLink)
     })
   })
   .catch(error => {
