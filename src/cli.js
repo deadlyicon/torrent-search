@@ -6,6 +6,7 @@ import torrentSearch from '.'
 import sprintf from 'sprintf'
 import temp from 'temp'
 import child_process from 'child_process'
+import chalk from 'chalk'
 
 temp.track()
 const exec = child_process.exec
@@ -21,6 +22,7 @@ cli
   .option('-p, --page <n>', 'page', Number)
   .option('-s, --sort <s>', 'sort', /(best|date|size|seeders|leechers)/)
   .option('-a, --asc', 'asc')
+  .option('-o, --open', 'open')
   .parse(process.argv);
 
 if (cli.verbose) process.env.verbose = '1'
@@ -28,6 +30,7 @@ const query = cli.args[0]
 const page  = cli.page || 1
 const sort  = cli.sort || 'best'
 const desc  = !cli.asc
+const open  = !!cli.open
 
 torrentSearch({query, page, sort, desc})
   // .then(torrents => {
@@ -40,11 +43,17 @@ torrentSearch({query, page, sort, desc})
   .then(torrentSearch.magnetLinksForTorrents)
   .then(magnetLinks => {
     magnetLinks.forEach(magnetLink => {
-      console.log(magnetLink)
+      if (open){
+        if (process.env.verbose) console.log(chalk.blue('opening'), magnetLink)
+        child_process.spawn(`open`, [magnetLink], {stdio: 'inherit'})
+      }else{
+        console.log(magnetLink)
+      }
     })
   })
   .catch(error => {
     console.error(error)
+    process.exit(1)
   })
 
 // TODO make this its own npm package named file-prompt
