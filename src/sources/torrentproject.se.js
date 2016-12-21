@@ -12,7 +12,7 @@ export default source.extend({
     const link = DOMNode.find('> h3 > a')
     const torrent = {
       name: link.text(),
-      href: link.attr('href'),
+      href: link.attr('href').replace(/^\//, 'https://torrentproject.se/'),
       seeders: DOMNode.find('.seeders b').text(),
       size: DOMNode.find('.torrent-size').text(),
       age: DOMNode.find('.cated').text(),
@@ -26,7 +26,7 @@ export default source.extend({
   },
 
   magnetLinkForTorrent(torrent){
-    const url = torrent.href.replace(/^\//, 'https://torrentproject.se/')
+    const url = torrent.href
     return this.request('get', url)
       .then(($) => {
         return $('a[href^="magnet:"]').attr('href')

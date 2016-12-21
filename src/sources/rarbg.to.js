@@ -12,7 +12,7 @@ export default source.extend({
     const link = DOMNode.find('a[href^="/torrent/"]')
     const torrent = {
       name: link.text(),
-      href: link.attr('href'),
+      href: link.attr('href').replace(/^\//, 'https://rarbg.to/'),
       created_at: DOMNode.find('td:nth-child(3)').text(),
       size:       DOMNode.find('td:nth-child(4)').text(),
       seeders:    DOMNode.find('td:nth-child(5)').text(),
@@ -22,7 +22,7 @@ export default source.extend({
   },
 
   magnetLinkForTorrent(torrent){
-    const url = torrent.href.replace(/^\//, 'https://rarbg.to/')
+    const url = torrent.href
     return this.request('get', url)
       .then(($) => {
         return $('a[href^="magnet:"]').attr('href')

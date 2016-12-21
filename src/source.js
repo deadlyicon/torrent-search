@@ -19,7 +19,7 @@ export default {
 
   search(query, page=1){
     const url = this.queryToURL(query, page)
-    console.log(`searching for ${query} at ${url}`)
+    // console.log(`searching for ${query} at ${url}`)
     return this.request('get', url)
       .then(($) => {
         return this.extractTorrentDOMNodes($)

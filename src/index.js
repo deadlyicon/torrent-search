@@ -15,7 +15,6 @@ export default function torrentSearch(query, page=1){
   ).then(results => {
     let torrents = []
     while (results.length) torrents = torrents.concat(results.shift())
-    console.log(torrents.length)
     return torrents
   })
   .then(torrents =>
