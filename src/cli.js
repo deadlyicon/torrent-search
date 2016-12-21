@@ -1,18 +1,37 @@
 #!/usr/bin/env node
 
+import cli from 'commander'
 import fs from 'fs'
 import torrentSearch from '.'
 import sprintf from 'sprintf'
 import temp from 'temp'
 import child_process from 'child_process'
 
+temp.track()
 const exec = child_process.exec
 
-temp.track()
 
-const query = process.argv[2] || ''
+cli
+  .version(require('../package.json').version)
+  .option('-h, --help', 'help', ()=>{
+    cli.help()
+    process.exit(1)
+  })
+  .option('-v, --verbose', 'verbose')
+  .option('-p, --page <n>', 'page', Number)
+  .option('-s, --sort <s>', 'sort', /(best|date|size|seeders|leechers)/)
+  .option('-a, --asc', 'asc')
+  .parse(process.argv);
 
-torrentSearch({query, page:1}, 0)
+const options = {
+  query: cli.args[0],
+  verbose: !!cli.verbose,
+  page: cli.page || 1,
+  sort: cli.sort || 'best',
+  desc: !cli.asc,
+}
+
+torrentSearch(options)
   .then(torrents => {
     console.log(torrents)
     // throw new Error('fuck')
