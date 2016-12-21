@@ -2,8 +2,16 @@ import source from '../source'
 
 export default source.extend({
 
-  queryToURL(query, page=1){
-    return `http://rarbg.to/torrents.php?search=${encodeURIComponent(query)}`
+  // 'best' || date' || 'size' || 'seeders' || 'leechers'
+  queryToURL({query, page, sortBy, desc}){
+    const order = sortBy === 'best'
+      ? 'data'
+      : sortBy === 'date'
+        ? 'data'
+        : sortBy
+
+    const by = desc ? 'DESC' : 'ASC'
+    return `http://rarbg.to/torrents.php?search=${encodeURIComponent(query)}&order=${order}&by=${by}`
   },
 
   torrentDOMNodeSelector: 'tr.lista2',

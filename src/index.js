@@ -1,10 +1,10 @@
 import sources from './sources'
 
 
-export default function torrentSearch(query, page=1){
+export default function torrentSearch({query, page=1}){
   return Promise.all(
     Object.keys(sources).map(source =>
-      sources[source].search(query, page)
+      sources[source].search({query, page})
         .then(torrents => {
           torrents.forEach(torrent => {
             torrent.source = source

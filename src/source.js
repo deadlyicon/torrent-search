@@ -19,9 +19,14 @@ export default {
     })
   },
 
-  search(query, page=1){
-    const url = this.queryToURL(query, page)
-    // console.log(`searching for ${query} at ${url}`)
+  /*
+    query: String
+    sortBy: 'best' || date' || 'size' || 'seeders' || 'leechers'
+    desc: Boolean
+    page: Number
+  */
+  search({query='', sortBy='best', desc=true, page=1}){
+    const url = this.queryToURL({query, sortBy, desc, page})
     return this.request('get', url)
       .then(($) => {
         return this.extractTorrentDOMNodes($)

@@ -2,8 +2,14 @@ import source from '../source'
 
 export default source.extend({
 
-  queryToURL(query, page=1){
-    return `http://1337x.to/search/${encodeURIComponent(query)}/${page}/`
+  // 'best' || date' || 'size' || 'seeders' || 'leechers'
+
+  queryToURL({query, sortBy, desc, page}){
+    if (sortBy === 'best')
+      return `http://1337x.to/search/${encodeURIComponent(query)}/${page}/`
+    const sort = sortBy === 'date' ? 'time' : sortBy
+    const direction = desc ? 'desc' : 'asc'
+    return `http://1337x.to/sort-search/${encodeURIComponent(query)}/${sort}/${direction}/${page}/`
   },
 
   torrentDOMNodeSelector: '.box-info-detail.inner-table table > tbody > tr',

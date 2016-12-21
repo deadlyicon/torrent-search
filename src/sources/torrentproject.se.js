@@ -2,8 +2,21 @@ import source from '../source'
 
 export default source.extend({
 
-  queryToURL(query, page=0){
-    return `https://torrentproject.se/?hl=en&num=2000&start=0&filter=2000&safe=off&orderby=best&s=${encodeURIComponent(query)}`
+  // 'best' || date' || 'size' || 'seeders' || 'leechers'
+  queryToURL({query, page, sortBy, desc}){
+    const orderBy = (
+      sortBy === 'best'
+        ? 'best'
+      : sortBy === 'date'
+        ? desc ? 'latest' : 'oldest'
+      : sortBy === 'size'
+        ? desc ? 'sizeD' : 'sizeA'
+      : sortBy === 'seeders'
+        ? 'seeders'
+      : sortBy
+    )
+
+    return `https://torrentproject.se/?hl=en&num=2000&start=0&filter=2000&safe=off&orderby=${orderBy}&s=${encodeURIComponent(query)}`
   },
 
   torrentDOMNodeSelector: 'li > .torrent',

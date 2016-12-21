@@ -12,7 +12,7 @@ temp.track()
 
 const query = process.argv[2] || ''
 
-torrentSearch(query, 0)
+torrentSearch({query, page:1}, 0)
   .then(torrents => {
     console.log(torrents)
     // throw new Error('fuck')
