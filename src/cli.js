@@ -26,6 +26,25 @@ torrentSearch(query, 0)
     console.error(error)
   })
 
+// TODO make this its own npm package named file-prompt
+function prompt(torrents){
+  return new Promise((resolve, reject) => {
+    temp.open('torrent-search', function(error, info) {
+      if (error) return reject(error)
+      fs.write(info.fd, torrentsToPromptText(torrents), "utf-8",  function(error) {
+        if (error) return reject(error)
+        fs.close(info.fd, function(error) {
+          if (error) return reject(error)
+          child_process.exec(`$EDITOR '${info.path}'`, function(error, stdout) {
+            const promptText = fs.readFileSync(info.path, "utf-8")
+            resolve(promptTextToTorrents(promptText))
+          })
+        });
+      });
+    });
+  })
+}
+
 
 function torrentsToPromptText(torrents){
   return torrents.map(torrent => {
@@ -39,26 +58,7 @@ function torrentsToPromptText(torrents){
   }).join("\n")
 }
 
-
-function prompt(torrents){
-  return new Promise((resolve, reject) => {
-    temp.open('myprefix', function(error, info) {
-      if (error) return reject(error)
-      fs.write(info.fd, torrentsToPromptText(torrents), "utf-8",  function(error) {
-        if (error) return reject(error)
-        fs.close(info.fd, function(error) {
-          if (error) return reject(error)
-          child_process.exec(`$EDITOR '${info.path}'`, function(error, stdout) {
-            const promptText = fs.readFileSync(info.path, "utf-8")
-            resolve(parsePromptText(promptText))
-          })
-        });
-      });
-    });
-  })
-}
-
-function parsePromptText(promptText){
+function promptTextToTorrents(promptText){
   return promptText
     .split("\n")
     .filter(line => !/^\s*(#|$)/.test(line))
