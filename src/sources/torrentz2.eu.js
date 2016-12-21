@@ -44,19 +44,10 @@ export default source.extend({
       .then(trackers =>
         Promise.race(
           trackers.map(tracker =>
-            this.request('get', tracker.href)
-              .then(tracker.extractor)
-              .then(magnetLink => {
-                if (!magnetLink) console.log('FAILED TO FIND MAGNET LINK AT', tracker.href)
-                return magnetLink
-              })
+            this.request('get', tracker.href).then(tracker.extractor)
           )
         )
       )
-      // .then(magnetLink => {
-      //   if (!magnetLink) console.log('FAILED TO FIND MAGNET LINK')
-      //   return magnetLink
-      // })
   },
 
 })

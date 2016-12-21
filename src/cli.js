@@ -24,18 +24,18 @@ cli
   .parse(process.argv);
 
 if (cli.verbose) process.env.verbose = '1'
-const query   = cli.args[0]
-const page    = cli.page || 1
-const sort    = cli.sort || 'best'
-const desc    = !cli.asc
+const query = cli.args[0]
+const page  = cli.page || 1
+const sort  = cli.sort || 'best'
+const desc  = !cli.asc
 
 torrentSearch({query, page, sort, desc})
-  .then(torrents => {
-    // torrents.length = 4
-    // console.log(torrents)
-    // throw new Error('fuck')
-    return torrents
-  })
+  // .then(torrents => {
+  //   // torrents.length = 4
+  //   // console.log(torrents)
+  //   // throw new Error('fuck')
+  //   return torrents
+  // })
   .then(prompt)
   .then(torrentSearch.magnetLinksForTorrents)
   .then(magnetLinks => {
@@ -65,7 +65,6 @@ function prompt(torrents){
     });
   })
 }
-
 
 function torrentsToPromptText(torrents){
   return torrents.map(torrent => {
