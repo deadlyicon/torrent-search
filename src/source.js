@@ -1,5 +1,7 @@
 import cloudscraper from 'cloudscraper'
 import cheerio from 'cheerio'
+import moment from 'moment'
+import chrono from 'chrono-node'
 
 export default {
 
@@ -24,9 +26,9 @@ export default {
       .then(($) => {
         return this.extractTorrentDOMNodes($)
           .toArray()
-          .map(DOMNode =>
-            this.extractTorrentFromDOMNode($(DOMNode))
-          )
+          .map($)
+          .map(this.extractTorrentFromDOMNode)
+          .map(this.polishTorrent)
       })
   },
 
@@ -34,6 +36,16 @@ export default {
 
   extractTorrentDOMNodes($){
     return $(this.torrentDOMNodeSelector)
+  },
+
+  polishTorrent(torrent){
+    torrent.seeders = Number(torrent.seeders)
+    torrent.leechers = Number(torrent.leechers)
+    torrent.size = sizeStringToMBInteger(torrent.size)
+    torrent.created_at = parseDate(torrent.created_at || torrent.age)
+    if (torrent.created_at)
+      torrent.age = moment(torrent.created_at).fromNow()
+    return torrent
   },
 
   // queryToURL(query, page=0){
@@ -65,4 +77,15 @@ export default {
   },
 
 
+}
+
+function sizeStringToMBInteger(size){
+  const matches = size.match(/(\d+(\.\d+)?)\s*mb/i)
+  return matches ? parseFloat(matches[1], 10) : 0
+}
+
+function parseDate(age){
+  age = (age || '').replace(/\'(\d\d(?:\D|$))/, "20$1")
+  const results = chrono.parse(age)
+  return results && results[0] ? results[0].start.date() : undefined
 }

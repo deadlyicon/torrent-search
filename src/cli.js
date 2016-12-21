@@ -13,6 +13,11 @@ temp.track()
 const query = process.argv[2] || ''
 
 torrentSearch(query, 0)
+  .then(torrents => {
+    console.log(torrents)
+    // throw new Error('fuck')
+    return torrents
+  })
   .then(prompt)
   .then(torrents =>
     torrentSearch.magnetLinksForTorrents(torrents)
@@ -50,12 +55,13 @@ function torrentsToPromptText(torrents){
   return torrents.map(torrent => {
     const args = {
       ...torrent,
-      name: torrent.name.replace(/\|/,'').substr(0,50),
+      name: torrent.name.replace(/\|/,'').substr(0,70),
       verified: (torrent.verified ? 'V' : ' '),
       json: JSON.stringify(torrent),
       age: torrent.age || torrent.created_at || '',
+      sal: `${torrent.seeders}/${torrent.leechers}`
     }
-    return sprintf(`# | %(verified)-1s | %(name)-50s | %(age)-20s | %(href)-30s | JSON:%(json)s`, args);
+    return sprintf(`# | %(verified)-1s | %(name)-70s | %(sal)-10s | %(age)-15s | %(href)-30s | JSON:%(json)s`, args);
   }).join("\n")
 }
 

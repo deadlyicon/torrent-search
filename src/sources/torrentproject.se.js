@@ -14,14 +14,11 @@ export default source.extend({
       name: link.text(),
       href: link.attr('href').replace(/^\//, 'https://torrentproject.se/'),
       seeders: DOMNode.find('.seeders b').text(),
+      leechers: DOMNode.find('.leechers b').text(),
       size: DOMNode.find('.torrent-size').text(),
       age: DOMNode.find('.cated').text(),
       verified: DOMNode.find('.verified').length > 0,
     }
-    if (torrent.seeders)
-      torrent.seeders = Number(torrent.seeders)
-    else
-      delete torrent.seeders
     return torrent
   },
 

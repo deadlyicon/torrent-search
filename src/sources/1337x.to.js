@@ -14,7 +14,7 @@ export default source.extend({
       name: link.text(),
       href: link.attr('href').replace(/^\//, 'http://1337x.to/'),
       created_at: DOMNode.find('.coll-date').text(),
-      size:       DOMNode.find('.size').text(),
+      size:       DOMNode.find('.size').text().split('MB')[0]+' MB',
       seeders:    DOMNode.find('.seeds').text(),
       leechers:   DOMNode.find('.leeches').text(),
     }
