@@ -1,6 +1,6 @@
 import sources from './sources'
 
-export default function torrentSearch(query, page=0){
+export default function torrentSearch(query, page=1){
   return Promise.all(
     Object.keys(sources).map(source =>
       sources[source].search(query, page)

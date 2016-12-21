@@ -17,17 +17,21 @@ export default {
     })
   },
 
-  search(query, page=0){
+  search(query, page=1){
     const url = this.queryToURL(query, page)
     console.log(`searching for ${query} at ${url}`)
-    console.log(this)
     return this.request('get', url)
       .then((body) => {
         const $ = cheerio.load(body)
         return this.extractTorrentDOMNodes($)
-          .toArray().map(DOMNode =>
+          .toArray()
+          .map(DOMNode =>
             this.extractTorrentFromDOMNode($(DOMNode))
           )
+          .map(torrent => {
+            torrent.type = this.sourceName
+            return torrent
+          })
       })
   },
 
