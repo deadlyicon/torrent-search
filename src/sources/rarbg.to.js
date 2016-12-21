@@ -21,12 +21,4 @@ export default source.extend({
     return torrent;
   },
 
-  magnetLinkForTorrent(torrent){
-    const url = torrent.href
-    return this.request('get', url)
-      .then(($) => {
-        return $('a[href^="magnet:"]').attr('href')
-      })
-  }
-
 })

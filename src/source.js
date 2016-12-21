@@ -52,15 +52,17 @@ export default {
   //   throw new Error('override `torrentToMagnetLinkURL` in your source')
   // },
 
-  getMagnetLink(torrent){
-    const url = this.torrentToMagnetLinkURL(torrent)
-    // return this.request('get', url)
-    //   .then((body) => {
-    //     const $ = cheerio.load(body)
-    //     return this.extractTorrentDOMNodes($).map((_, DOMNode) =>
-    //       this.extractTorrentFromDOMNode($(DOMNode))
-    //     )
-    //   })
+  torrentToMagnetLinkURL(torrent){
+    return torrent.href
   },
+
+  magnetLinkForTorrent(torrent){
+    const url = this.torrentToMagnetLinkURL(torrent)
+    return this.request('get', url)
+      .then(($) => {
+        return $('a[href^="magnet:"]').attr('href')
+      })
+  },
+
 
 }
