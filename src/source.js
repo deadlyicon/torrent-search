@@ -27,10 +27,6 @@ export default {
           .map(DOMNode =>
             this.extractTorrentFromDOMNode($(DOMNode))
           )
-          .map(torrent => {
-            torrent.type = this.sourceName
-            return torrent
-          })
       })
   },
 
