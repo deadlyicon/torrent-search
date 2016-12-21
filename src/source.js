@@ -12,7 +12,7 @@ export default {
     return new Promise(function(resolve, reject){
       cloudscraper[method.toLowerCase()](url, function(error, response, body) {
         if (error) return reject(error)
-        resolve(body)
+        resolve(cheerio.load(body))
       })
     })
   },
@@ -21,8 +21,7 @@ export default {
     const url = this.queryToURL(query, page)
     console.log(`searching for ${query} at ${url}`)
     return this.request('get', url)
-      .then((body) => {
-        const $ = cheerio.load(body)
+      .then(($) => {
         return this.extractTorrentDOMNodes($)
           .toArray()
           .map(DOMNode =>

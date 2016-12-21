@@ -33,14 +33,17 @@ defineSource('torrentproject.se', {
     return torrent
   },
 
-  // torrentToMagnetLinkURL(torrent){
-  //   return torrent.href.replace(/^\//, 'https://torrentproject.se/')
-  // },
+  magnetLinkForTorrent(torrent){
+    const url = torrent.href.replace(/^\//, 'https://torrentproject.se/')
+    return this.request('get', url)
+      .then(($) => {
+        return $('a[href^="magnet:"]').attr('href')
+      })
+  },
 
 })
 
 
-//
 defineSource('rarbg.to', {
 
   queryToURL(query, page=1){
@@ -60,6 +63,14 @@ defineSource('rarbg.to', {
       leechers:   DOMNode.find('td:nth-child(6)').text(),
     }
     return torrent;
+  },
+
+  magnetLinkForTorrent(torrent){
+    const url = torrent.href.replace(/^\//, 'http://rarbg.to/')
+    return this.request('get', url)
+      .then(($) => {
+        return $('a[href^="magnet:"]').attr('href')
+      })
   }
 
 })
