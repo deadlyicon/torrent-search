@@ -22,7 +22,7 @@ cli
   .option('-p, --page <n>', 'page', Number)
   .option('-s, --sort <s>', 'sort', /(best|date|size|seeders|leechers)/)
   .option('-a, --asc', 'asc')
-  .option('-o, --open', 'open')
+  .option('-p, --print', 'print')
   .parse(process.argv);
 
 if (cli.verbose) process.env.verbose = '1'
@@ -30,7 +30,7 @@ const query = cli.args[0]
 const page  = cli.page || 1
 const sort  = cli.sort || 'best'
 const desc  = !cli.asc
-const open  = !!cli.open
+const print  = !!cli.print
 
 torrentSearch({query, page, sort, desc})
   // .then(torrents => {
@@ -43,11 +43,11 @@ torrentSearch({query, page, sort, desc})
   .then(torrentSearch.magnetLinksForTorrents)
   .then(magnetLinks => {
     magnetLinks.forEach(magnetLink => {
-      if (open){
+      if (print){
+        console.log(magnetLink)
+      }else{
         if (process.env.verbose) console.log(chalk.blue('opening'), magnetLink)
         child_process.spawn(`open`, [magnetLink], {stdio: 'inherit'})
-      }else{
-        console.log(magnetLink)
       }
     })
   })
