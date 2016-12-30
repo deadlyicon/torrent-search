@@ -1,7 +1,7 @@
 {
   "name": "torrent-search",
   "version": "0.0.1",
-  "description": "",
+  "description": "searches for torrents",
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register --recursive test/.setup.js test/",
@@ -9,6 +9,7 @@
     "build:watch": "npm run build -- --watch",
     "postinstall": "npm run build"
   },
+  "repository": "git@github.com:deadlyicon/torrent-search.git",
   "keywords": [],
   "author": "",
   "license": "MIT",
@@ -23,15 +24,15 @@
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
     "sprintf": "^0.1.5",
-    "temp": "^0.8.3"
-  },
-  "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-class-properties": "^6.19.0",
     "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "babel-plugin-transform-regenerator": "^6.21.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-latest": "^6.16.0",
+    "temp": "^0.8.3"
+  },
+  "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
   }
