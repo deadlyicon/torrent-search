@@ -7,7 +7,7 @@
     "test": "mocha --compilers js:babel-core/register --recursive test/.setup.js test/",
     "build": "babel src/ --out-dir dist/",
     "build:watch": "npm run build -- --watch",
-    "postinstall": "npm run build"
+    "preinstall": "npm run build"
   },
   "repository": "git@github.com:deadlyicon/torrent-search.git",
   "keywords": [],
