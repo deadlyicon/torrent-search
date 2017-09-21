@@ -1,4 +1,5 @@
 const sources = require('./sources')
+const logger = require('./logger')
 
 const torrentSearch = function(options){
   options = Object.assign({
@@ -16,7 +17,7 @@ const torrentSearch = function(options){
           torrents.forEach(torrent => {
             torrent.source = source
           })
-          console.log(`${source} found ${torrents.length} torrents`)
+          logger.debug(`${source} found ${torrents.length} torrents`)
           return torrents
         })
     )
@@ -49,18 +50,16 @@ const torrentSearch = function(options){
 module.exports = torrentSearch
 
 torrentSearch.magnetLinksForTorrents = function(torrents){
-    // console.log(`magnetLinksForTorrents`, torrents)
   return Promise.all(
     torrents.map(magnetLinkForTorrent)
   )
   .then(magnetLinks => {
-    console.log(`found magnet links`, magnetLinks)
+    logger.debug('Found', `${magnetLinks.length} magnet links`)
     return magnetLinks.filter(magnetLink => typeof magnetLink === 'string')
   })
 }
 
 function magnetLinkForTorrent(torrent){
-  console.log(`magnetLinkForTorrent`, torrent.source)
   return sources[torrent.source].magnetLinkForTorrent(torrent)
 }
 

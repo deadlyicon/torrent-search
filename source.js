@@ -1,8 +1,7 @@
 const moment = require('moment')
 const chrono = require('chrono-node')
-const cloudscraper = require('cloudscraper')
 const cheerio = require('cheerio')
-const chalk = require('chalk')
+const request = require('./request')
 
 module.exports = {
 
@@ -11,7 +10,8 @@ module.exports = {
   },
 
   request(method, url){
-    return request(method, url)
+    const req = request(method, url)
+    return req.then(html => cheerio.load(html))
   },
 
   /*
@@ -70,10 +70,9 @@ module.exports = {
 
   magnetLinkForTorrent(torrent){
     const url = this.torrentToMagnetLinkURL(torrent)
-    return this.request('get', url)
-      .then(($) => {
-        return $('a[href^="magnet:"]').attr('href')
-      })
+    return this.request('get', url).then(($) => {
+      return $('a[href^="magnet:"]').attr('href')
+    })
   },
 
 
@@ -91,18 +90,18 @@ function parseDate(age){
   return results && results[0] ? results[0].start.date() : undefined
 }
 
-request.openRequests = 0
-function request(method, url){
-  request.openRequests++
-  if (process.env.verbose)
-    console.log(chalk.blue('REQUEST'), `(${request.openRequests})`, `${method} ${url}`)
-  return new Promise(function(resolve, reject){
-    cloudscraper[method.toLowerCase()](url, function(error, response, body) {
-      request.openRequests--
-      if (process.env.verbose)
-        console.log(chalk.green('RESPONSE'), `(${request.openRequests})`, response.statusCode)
-      if (error) return reject(error)
-      resolve(cheerio.load(body))
-    })
-  })
-}
+// request.openRequests = 0
+// function request(method, url){
+//   request.openRequests++
+//   if (process.env.verbose)
+//     console.log(chalk.blue('REQUEST'), `(${request.openRequests})`, `${method} ${url}`)
+//   return new Promise(function(resolve, reject){
+//     cloudscraper[method.toLowerCase()](url, function(error, response, body) {
+//       request.openRequests--
+//       if (process.env.verbose)
+//         console.log(chalk.green('RESPONSE'), `(${request.openRequests})`, response.statusCode)
+//       if (error) return reject(error)
+//       resolve(cheerio.load(body))
+//     })
+//   })
+// }

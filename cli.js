@@ -6,7 +6,7 @@ const torrentSearch = require('.')
 const sprintf = require('sprintf')
 const temp = require('temp')
 const child_process = require('child_process')
-const chalk = require('chalk')
+const logger = require('./logger')
 
 temp.track()
 const exec = child_process.exec
@@ -19,12 +19,14 @@ cli
     process.exit(1)
   })
   .option('-v, --verbose', 'verbose')
+  .option('-D, --debug', 'debug')
   .option('-p, --page <n>', 'page', Number)
   .option('-s, --sort <s>', 'sort', /(best|date|size|seeders|leechers)/)
   .option('-a, --asc', 'asc')
   .option('-P, --print', 'print')
   .parse(process.argv);
 
+if (cli.debug) process.env.debug = '1'
 if (cli.verbose) process.env.verbose = '1'
 const query = cli.args[0]
 const page  = cli.page || 1
@@ -32,37 +34,28 @@ const sort  = cli.sort || 'best'
 const desc  = !cli.asc
 const print  = !!cli.print
 
-if (process.env.verbose)
-  console.log(chalk.blue(`searching for: `)+JSON.stringify(query))
+logger.info('Searching for:', query)
 
 torrentSearch({query, page, sort, desc})
   .then(torrents => {
-    // torrents.length = 4
-    console.log(`${torrents.length} torrents found`)
-    // throw new Error('fuck')
+    logger.info('Found:', `${torrents.length} torrents`)
     return torrents
   })
   .then(prompt)
-  .then(torrents => {
-    console.log(`seeking magnet links for ${torrents.length} torrents`)
-    return torrents
-  })
   .then(torrentSearch.magnetLinksForTorrents)
   .then(magnetLinks => {
-    console.log(`found ${magnetLinks.length} magnet links`)
+    logger.info('Found:', `${magnetLinks.length} magnet links`)
     magnetLinks.forEach(magnetLink => {
       if (print){
         console.log(magnetLink)
       }else{
-        if (process.env.verbose) console.log(chalk.blue('opening'), magnetLink)
+        logger.info('Opening', magnetLink)
         child_process.spawn(`open`, [magnetLink], {stdio: 'inherit'})
       }
     })
-    console.log("DONE GOOD!")
     process.exit(0)
   })
   .catch(error => {
-    console.log('ERROR BAILING!')
     console.error(error)
     process.exit(1)
   })

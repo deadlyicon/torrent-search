@@ -28,7 +28,6 @@ module.exports = source.extend({
   },
 
   magnetLinkForTorrent(torrent){
-    console.log('torrentz2.magnetLinkForTorrent', torrent.href)
     return this.request('get', torrent.href)
       .then( $ =>
         $('.downlinks > dl, .download > dl')
@@ -46,11 +45,7 @@ module.exports = source.extend({
         Promise.race(
           trackers.map(tracker => {
             return this.request('get', tracker.href)
-              .then($ => {
-                const magnetLink = tracker.extractor($)
-                console.log('torrentz2. found magnet link', magnetLink)
-                return magnetLink
-              })
+              .then($ => tracker.extractor($))
           })
         )
       )
