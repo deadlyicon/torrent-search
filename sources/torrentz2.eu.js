@@ -1,7 +1,7 @@
-import source from '../source'
-import URL from 'url'
+const source = require('../source')
+const URL = require('url')
 
-export default source.extend({
+module.exports = source.extend({
 
   // 'best' || date' || 'size' || 'seeders'
   queryToURL({query, sort, desc, page}){
@@ -28,9 +28,10 @@ export default source.extend({
   },
 
   magnetLinkForTorrent(torrent){
+    console.log('torrentz2.magnetLinkForTorrent', torrent.href)
     return this.request('get', torrent.href)
       .then( $ =>
-        $('.download > dl')
+        $('.downlinks > dl, .download > dl')
           .toArray()
           .map(DOMNode => {
             const href = $(DOMNode).find('dt > a').attr('href')
@@ -43,9 +44,14 @@ export default source.extend({
       )
       .then(trackers =>
         Promise.race(
-          trackers.map(tracker =>
-            this.request('get', tracker.href).then(tracker.extractor)
-          )
+          trackers.map(tracker => {
+            return this.request('get', tracker.href)
+              .then($ => {
+                const magnetLink = tracker.extractor($)
+                console.log('torrentz2. found magnet link', magnetLink)
+                return magnetLink
+              })
+          })
         )
       )
   },

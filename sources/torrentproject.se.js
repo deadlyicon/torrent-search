@@ -1,19 +1,15 @@
-import source from '../source'
+const source = require('../source')
 
-export default source.extend({
+module.exports = source.extend({
 
   // 'best' || date' || 'size' || 'seeders' || 'leechers'
   queryToURL({query, page, sort, desc}){
     const orderBy = (
-      sort === 'best'
-        ? 'best'
-      : sort === 'date'
-        ? desc ? 'latest' : 'oldest'
-      : sort === 'size'
-        ? desc ? 'sizeD' : 'sizeA'
-      : sort === 'seeders'
-        ? 'seeders'
-      : sort
+      sort === 'date'? desc ? 'latest' : 'oldest' :
+      sort === 'size'? desc ? 'sizeD' : 'sizeA':
+      // sort === 'best' ? 'best' :
+      // sort === 'seeders' ? 'seeders' :
+      sort
     )
 
     return `https://torrentproject.se/?hl=en&num=2000&start=0&filter=2000&safe=off&orderby=${orderBy}&s=${encodeURIComponent(query)}`

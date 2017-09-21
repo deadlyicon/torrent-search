@@ -1,6 +1,6 @@
-import source from '../source'
+const source = require('../source')
 
-export default source.extend({
+module.exports = source.extend({
 
   // 'best' || date' || 'size' || 'seeders' || 'leechers'
 
