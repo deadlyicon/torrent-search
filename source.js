@@ -97,7 +97,7 @@ function request(method, url){
   if (process.env.verbose)
     console.log(chalk.blue('REQUEST'), `(${request.openRequests})`, `${method} ${url}`)
   return new Promise(function(resolve, reject){
-      [method.toLowerCase()](url, function(error, response, body) {
+    cloudscraper[method.toLowerCase()](url, function(error, response, body) {
       request.openRequests--
       if (process.env.verbose)
         console.log(chalk.green('RESPONSE'), `(${request.openRequests})`, response.statusCode)
