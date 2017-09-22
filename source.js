@@ -27,7 +27,15 @@ module.exports = {
         return this.extractTorrentDOMNodes($)
           .toArray()
           .map($)
-          .map(this.extractTorrentFromDOMNode)
+          .map(nodes =>
+            nodes
+              .map(node => {
+                try{
+                  return this.extractTorrentFromDOMNode(node)
+                }catch(error){}
+              })
+              .filter(node => !!node)
+          )
           .map(this.polishTorrent)
       })
   },
@@ -79,6 +87,7 @@ module.exports = {
 }
 
 function sizeStringToMBInteger(size){
+  if (!size) return
   const matches = size.match(/(\d+(\.\d+)?)\s*mb/i)
   return matches ? parseFloat(matches[1], 10) : 0
 }

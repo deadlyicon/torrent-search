@@ -82,7 +82,7 @@ function prompt(torrents){
 function torrentsToPromptText(torrents){
   return torrents.map(torrent => {
     const args = Object.assign({}, torrent, {
-      name: torrent.name.replace(/\|/,'').substr(0,70),
+      name: (torrent.name || '').replace(/\|/,'').substr(0,70),
       verified: (torrent.verified ? 'V' : ' '),
       json: JSON.stringify(torrent),
       age: torrent.age || torrent.created_at || '',
