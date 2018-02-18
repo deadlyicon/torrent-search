@@ -24,19 +24,18 @@ module.exports = {
     const url = this.queryToURL({query, page, sort, desc})
     return this.request('get', url)
       .then(($) => {
-        return this.extractTorrentDOMNodes($)
-          .toArray()
-          .map($)
-          .map(nodes =>
-            nodes
-              .map(node => {
-                try{
-                  return this.extractTorrentFromDOMNode(node)
-                }catch(error){}
-              })
-              .filter(node => !!node)
-          )
-          .map(this.polishTorrent)
+        const torrents = []
+        const DOMNodes = this.extractTorrentDOMNodes($)
+        DOMNodes.each((index, node) => {
+          try{
+            torrents.push(
+              this.extractTorrentFromDOMNode($(node))
+            )
+          }catch(error){
+            console.warn(error)
+          }
+        })
+        return torrents.map(this.polishTorrent)
       })
   },
 
