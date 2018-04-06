@@ -1,5 +1,5 @@
 const sources = require('./sources')
-const logger = require('./logger')
+const logger = require('./logger')('search')
 
 const torrentSearch = function(options){
   options = Object.assign({

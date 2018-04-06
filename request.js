@@ -1,4 +1,4 @@
-const logger = require('./logger')
+const logger = require('./logger')('request')
 const { request } = require('cloudscraper')
 
 let openRequests = 0
@@ -12,9 +12,13 @@ module.exports = function(method, url){
   return new Promise(function(resolve, reject){
     request({method, url}, function(error, response, body) {
       openRequests--
-      logger.debug('RESPONSE:', ` ${response.statusCode} ${method.toUpperCase()} ${url}`)
-      if (error) return reject(error)
-      resolve(body)
+      if (error) {
+        logger.error('RESPONSE ERROR:', error)
+        reject(error)
+      }else{
+        logger.debug('RESPONSE:', ` ${response.statusCode} ${method.toUpperCase()} ${url}`)
+        resolve(body)
+      }
     })
   })
 }

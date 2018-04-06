@@ -6,7 +6,7 @@ const torrentSearch = require('.')
 const sprintf = require('sprintf')
 const temp = require('temp')
 const child_process = require('child_process')
-const logger = require('./logger')
+const logger = require('./logger')('CLI')
 
 temp.track()
 const exec = child_process.exec
@@ -34,22 +34,23 @@ const sort  = cli.sort || 'best'
 const desc  = !cli.asc
 const print  = !!cli.print
 
-logger.info('Searching for:', query)
+logger.verbose('Searching for:', query)
 
 torrentSearch({query, page, sort, desc})
   .then(torrents => {
-    logger.info('Found:', `${torrents.length} torrents`)
+    logger.verbose('Found:', `${torrents.length} torrents`)
+    if (torrents.length < 1) process.exit(0)
     return torrents
   })
   .then(prompt)
   .then(torrentSearch.magnetLinksForTorrents)
   .then(magnetLinks => {
-    logger.info('Found:', `${magnetLinks.length} magnet links`)
+    logger.verbose('Found:', `${magnetLinks.length} magnet links`)
     magnetLinks.forEach(magnetLink => {
       if (print){
         console.log(magnetLink)
       }else{
-        logger.info('Opening', magnetLink)
+        logger.verbose('Opening', magnetLink)
         child_process.spawn(`open`, [magnetLink], {stdio: 'inherit'})
       }
     })

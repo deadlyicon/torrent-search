@@ -37,6 +37,10 @@ module.exports = {
         })
         return torrents.map(this.polishTorrent)
       })
+      .catch(error => {
+        // log error here
+        return []
+      })
   },
 
   torrentDOMNodeSelector: '.torrent',
